@@ -5,9 +5,9 @@ import java.util.Scanner;
 
 public class App {
     private static boolean marcas[];
-    private static String nodos;
-    private static Cola verticesC;
-    private static Pila verticesP;
+    private static String[] vertices;
+    private static Cola colaVertices;
+    private static Pila pilaVertices;
     private static ListaLDoble adyacencias; 
     private static boolean isNumeric;
 
@@ -21,7 +21,7 @@ public class App {
         while (!salir) {
             boolean cargaCompleta = false;
             isNumeric = false;
-            verticesC = new Cola();
+            colaVertices = new Cola();
             // Cargamos los datos del grafo
             while (!cargaCompleta) {
                 System.out.println("\n\n");
@@ -33,9 +33,9 @@ public class App {
                 System.out.println("\n\nQue recorrido deseas?\n1)Busqueda primero en profundidad (bpp)\n2)Busqueda primero por anchura (bpa)\n3)Salir");
                 op = scan.nextInt();
                 if (op != 3) {
-                    System.out.println("Dame uno de los siguientes vertices "+ nodos + " para comenzar a recorrer");
-                    scan.nextLine();
-                    verticeInicial = (isNumeric)? Integer.toString(scan.nextInt()):scan.nextLine();
+                    System.out.println("Dame uno de los siguientes vertices ["+ String.join(" ", vertices) + "] para comenzar a recorrer");
+                    scan.nextLine(); // Limpia el buffer
+                    verticeInicial = (isNumeric)? Integer.toString(scan.nextInt()):""+Character.toUpperCase(scan.nextLine().replaceAll(" ", "").charAt(0));
                     System.out.println(verticeInicial);
                 }
                 switch (op) {
@@ -58,9 +58,14 @@ public class App {
             System.out.println("\n\nDesea probar con otro grafo?\n1)Si\n2)No");
             salir = (scan.nextInt() == 2)? true:salir;   
         }
+        scan.close();
     }
     
     // Procediminto (metodo) de bpp
+    // public static String busquedaPrimeroPorProfundidad(){
+        
+    //     return null;
+    // }
 
     // procedimiento (metodo) de bpa
 
@@ -107,17 +112,14 @@ public class App {
             String[] str;
             adyacencias = new ListaLDoble();
             ListaLDoble aux = adyacencias;
-            nodos = "";
-            int i = 0;
+            int i = 0, counter = 0;
 
             // Leer el archivo línea por línea
             while (scanner.hasNextLine()) {
                 linea = scanner.nextLine();           
                 // System.out.println(linea);                     
-                str = linea.split(":");
-                nodos = nodos + str[0].replace(" ", ""); // Agregandolo en la lista de nodos
-                
-                aux.setNodo(str[0].replaceAll(" ", ""));
+                str = linea.split(":");                
+                aux.setVertice(str[0].replaceAll(" ", ""));
                 // relleno de la lista adyacente
                 str = str[1].split(" "); 
                 for (i = 0; i < str.length; i++) {
@@ -132,21 +134,31 @@ public class App {
                         
                     }
                 }
-                System.out.println("Lista "+aux.getNodo()+": " + aux);
+                // System.out.println("Lista "+aux.getVertice()+": " + aux); // Para ver lo como esta leyendo el archivo
                 aux.setNext(new ListaLDoble());
                 aux = aux.getNext();
+                counter++;
             }
-            aux = null;
             // Creamos nuestro arrglo con la dimesion de cantidad de vertices que tenga el grafo.
-            marcas = new boolean[nodos.length()];
+            marcas = new boolean[counter];
             // Cerrar el Scanner después de leer todas las líneas
             scanner.close();
+            // Captura de los vertices en formato String en un arreglo
+            aux = adyacencias;
+            vertices = new String[counter];
+            for (i = 0; i < counter; i++) {
+                vertices[i] = aux.getVertice();
+                //System.out.println(vertices[i]);
+                aux = aux.getNext();
+            }
             return true;
         } catch (Exception e) {
             System.out.println(e);
             return false;
         }
     }
+
+
 
 }
 

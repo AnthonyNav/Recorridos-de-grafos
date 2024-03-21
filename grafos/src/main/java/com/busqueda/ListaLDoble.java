@@ -3,13 +3,13 @@ package com.busqueda;
 public class ListaLDoble {
     private Nodo inicio;
     private ListaLDoble next;
-    private String nodo;
+    private String vertice;
     
     // constructor
     public ListaLDoble() {
         inicio = null;
         next = null;
-        nodo = null;
+        vertice = null;
     }
     
     // getters y setters
@@ -29,12 +29,12 @@ public class ListaLDoble {
         return next;
     }
 
-    public String getNodo() {
-        return nodo;
+    public String getVertice() {
+        return vertice;
     }
     
-    public void setNodo(String nodo) {
-        this.nodo = nodo;
+    public void setVertice(String nodo) {
+        this.vertice = nodo;
     }
     // Algunos metodos dependen de otros, es por eso que se mantienen
     public void insertarInicio(String dato){
