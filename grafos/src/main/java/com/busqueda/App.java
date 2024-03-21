@@ -16,7 +16,8 @@ public class App {
         boolean salir = false;
         boolean salirMenu;
         int op;
-        String verticeInicial;
+        String verticeInicial = "";
+        int posI = 0;
 
         while (!salir) {
             boolean cargaCompleta = false;
@@ -37,23 +38,30 @@ public class App {
                     scan.nextLine(); // Limpia el buffer
                     verticeInicial = (isNumeric)? Integer.toString(scan.nextInt()):""+Character.toUpperCase(scan.nextLine().replaceAll(" ", "").charAt(0));
                     System.out.println(verticeInicial);
+                    posI = posicionVertice(verticeInicial);
                 }
-                switch (op) {
-                    case 1: // bpp
+                // Si existe el vertice inicial
+                if (posI != -1) {
+                    switch (op) {
+                        case 1: // bpp
                         
-                        break;
-                    case 2: // bpa
-
-                        break;
-                    case 3:
-                        salirMenu = true;
-                        System.out.println("Saliendo...");
-                        break;
-                
-                    default:
-                        System.out.println("Opcion no valida");
-                        break;
+                            break;
+                        case 2: // bpa
+    
+                            break;
+                        case 3:
+                            salirMenu = true;
+                            System.out.println("Saliendo...");
+                            break;
+                    
+                        default:
+                            System.out.println("Opcion no valida");
+                            break;
+                    }
+                } else{
+                    System.out.println("El vertice inicial dado no existe");
                 }
+                
             }
             System.out.println("\n\nDesea probar con otro grafo?\n1)Si\n2)No");
             salir = (scan.nextInt() == 2)? true:salir;   
@@ -62,10 +70,10 @@ public class App {
     }
     
     // Procediminto (metodo) de bpp
-    // public static String busquedaPrimeroPorProfundidad(){
+    public static String busquedaPrimeroPorProfundidad(String vertInit){
         
-    //     return null;
-    // }
+        return null;
+    }
 
     // procedimiento (metodo) de bpa
 
@@ -158,6 +166,16 @@ public class App {
         }
     }
 
+    public static int posicionVertice(String v){
+        int counter = 0;
+        for (String n : vertices) {
+            if (n.compareTo(v)==0) {
+                return counter++;
+            }
+            counter++;
+        }
+        return -1; // Retorna -1 si no existe
+    }
 
 
 }
