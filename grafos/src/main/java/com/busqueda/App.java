@@ -6,6 +6,8 @@ import java.util.Scanner;
 public class App {
     private static boolean marcas[];
     private static String[] vertices;
+    private static String orden;
+    private static String subyacentes;
     private static Cola colaVertices;
     private static Pila pilaVertices;
     private static ListaLDoble adyacencias; 
@@ -44,7 +46,11 @@ public class App {
                 if (posI != -1) {
                     switch (op) {
                         case 1: // bpp
-                        
+                            orden = "";
+                            borrarMarcas();
+                            bpp(verticeInicial);
+                            System.out.println("Resultados:\nOrden sin procesar: " + orden);
+                            System.out.println("\nOrden Procesado:\n" + procesamientoResultado(orden));
                             break;
                         case 2: // bpa
                             busquedaPrimeroEnAnchura(verticeInicial);
@@ -70,10 +76,25 @@ public class App {
         scan.close();
     }
     
-    // Procediminto (metodo) de bpp
-    public static String busquedaPrimeroPorProfundidad(String vertInit){
-        
-        return null;
+    public static void bpp(String v){
+        int posI = posicionVertice(v);
+        marcas[posI] = true;
+        Nodo auxNodo;
+        ListaLDoble auxl;
+        // Proceso para ubicar la lista adyaciente correspondiente a v
+        auxl = adyacencias;
+        while (auxl.getVertice().compareTo(v) != 0) {
+            auxl = auxl.getNext();
+        }
+        // Una vez ubicada, vamos a iterar de forma ordenada a las adyacencias del nodo v
+        auxNodo = auxl.getInicio();
+        while (auxNodo != null) {
+            if (!marcas[posicionVertice(auxNodo.getDato())]) {
+                orden = orden + v +":"+ auxNodo.getDato()+" "; 
+                bpp(auxNodo.getDato());
+            }
+            auxNodo = auxNodo.getNext();
+        }
     }
 
     // procedimiento (metodo) de bpa
@@ -168,15 +189,15 @@ public class App {
     }
 
     public static int posicionVertice(String v){
-        int counter = 0;
-        for (String n : vertices) {
-            if (n.compareTo(v)==0) {
-                return counter++;
+        int i;
+        for (i = 0; i < vertices.length; i++) {
+            if (vertices[i].compareTo(v) == 0) {
+                return i;
             }
-            counter++;
         }
         return -1; // Retorna -1 si no existe
     }
+
 
     // Método para búsqueda primero en anchura (BPA)
     public static void busquedaPrimeroEnAnchura(String vertInit) {
@@ -241,6 +262,78 @@ public class App {
        }
    }
 
-}
+    public static void borrarMarcas(){
+        int i;
+        for (i = 0; i < marcas.length; i++) {
+            marcas[i] = false;
+        }
+    }
 
+    public static String procesamientoResultado(String r){
+        // seccionamos los elementos
+        String[] str = r.split(" ");
+        String rec = "";
+        String aux = "";
+        int i, j;
+        boolean in = false;
+        String[] act, next = null;
+
+        for ( i = 0; i < str.length-1; i++) {
+            act = str[i].split(":");
+            next = str[i+1].split(":");
+            if (act[1].compareTo(next[0])==0) {
+                rec = rec + act[0] + " ";
+            } else{
+                rec = rec + act[0] + " ";
+                for ( j = i; j < str.length; j++) {
+                    aux = aux + str[j] + " ";
+                }
+                rec = rec + "\n"+transformString(aux);
+                in = true;
+                break;
+            }
+        }
+        if (!in) {
+            rec = rec + next[0] + " " + next[1] + " ";
+        }
+        return rec;
+    }
+
+    public static String transformString(String input){
+        String[] str = input.split(" ");
+        String rec = ""; 
+        String[] aux=null, aux2=null;
+        int i;
+        boolean in = false, up = false;
+        for (i = 0; i < str.length; i++) {
+            aux = str[i].split(":");
+            aux2 = aux;
+            rec = rec + aux[0]+":";
+            while (aux2[0].compareTo(aux[0])==0) {
+                rec = rec + aux[1]+" ";
+                i++;
+                if (i < str.length) {
+                    aux = str[i].split(":");  
+                } else{
+                    break;
+                }
+                in = true;
+            }
+
+            if (!in) {
+                rec = rec + aux[1]+" ";
+                in = false;
+            }
+            rec = rec+ "\n";
+        }   
+
+        if (aux[0].compareTo(aux2[0])!=0) {
+            rec = rec + str[str.length-1];
+        }
+
+        //System.out.println(rec);
+        return rec;
+    }
+   
+}
 
