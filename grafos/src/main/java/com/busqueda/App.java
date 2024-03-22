@@ -47,6 +47,7 @@ public class App {
                         
                             break;
                         case 2: // bpa
+                            busquedaPrimeroEnAnchura(verticeInicial);
     
                             break;
                         case 3:
@@ -82,33 +83,33 @@ public class App {
         String direccion = "";
         switch (gn) {
             case 1:
-                direccion = "grafos/src/main/java/com/busqueda/Grafos/G1.txt";
+                direccion = "C:/Users/Christian/Documents/Proyectos/BusquedaEnGrafos/grafos/src/main/java/com/busqueda/Grafos/G1.txt";
                 break;
             case 2:
-                direccion = "grafos/src/main/java/com/busqueda/Grafos/G2.txt";
+                direccion = "C:/Users/Christian/Documents/Proyectos/BusquedaEnGrafos/grafos/src/main/java/com/busqueda/Grafos/G2.txt";
                 break;
             case 3:
-                direccion = "grafos/src/main/java/com/busqueda/Grafos/G3.txt";
+                direccion = "C:/Users/Christian/Documents/Proyectos/BusquedaEnGrafos/grafos/src/main/java/com/busqueda/Grafos/G3.txt";
                 break;
             case 4:
-                direccion = "grafos/src/main/java/com/busqueda/Grafos/G4.txt";
+                direccion = "C:/Users/Christian/Documents/Proyectos/BusquedaEnGrafos/grafos/src/main/java/com/busqueda/Grafos/G4.txt";
                 isNumeric = true;
                 break;
             case 5:
-                direccion = "grafos/src/main/java/com/busqueda/Grafos/G5.txt";
+                direccion = "C:/Users/Christian/Documents/Proyectos/BusquedaEnGrafos/grafos/src/main/java/com/busqueda/Grafos/G5.txt";
                 break;
             case 6:
-                direccion = "grafos/src/main/java/com/busqueda/Grafos/G6.txt";
+                direccion = "C:/Users/Christian/Documents/Proyectos/BusquedaEnGrafos/grafos/src/main/java/com/busqueda/Grafos/G6.txt";
                 break;
             case 7:
-                direccion = "grafos/src/main/java/com/busqueda/Grafos/G7.txt";
+                direccion = "C:/Users/Christian/Documents/Proyectos/BusquedaEnGrafos/grafos/src/main/java/com/busqueda/Grafos/G7.txt";
                 break;
             case 8:
-                direccion = "grafos/src/main/java/com/busqueda/Grafos/G8.txt";
+                direccion = "C:/Users/Christian/Documents/Proyectos/BusquedaEnGrafos/grafos/src/main/java/com/busqueda/Grafos/G8.txt";
                 isNumeric = true;
                 break;
             default:
-                System.out.println("OpciÃ³n no vÃ¡lida");
+                System.out.println("Opcion no valida");
                 return false;
         }
 
@@ -177,6 +178,68 @@ public class App {
         return -1; // Retorna -1 si no existe
     }
 
+    // Método para búsqueda primero en anchura (BPA)
+    public static void busquedaPrimeroEnAnchura(String vertInit) {
+    App.BorrarMarcas();    
+    String[] arbol = new String[vertices.length];
+    int i=0;
+    colaVertices = new Cola();
+    marcas[posicionVertice(vertInit)] = true; // Marcamos el nodo inicial como visitado
+    colaVertices.insertar(vertInit); // Insertamos el nodo inicial en la cola
+    arbol[0]=vertInit;
+
+    while (!colaVertices.estaVacia()) {
+        String verticeActual;
+        verticeActual = colaVertices.eliminar(); // Sacamos el primer elemento de la cola
+
+        //System.out.println("Visitando nodo: " + verticeActual);
+
+        // Obtener los nodos adyacentes al nodo actual
+        ListaLDoble listaAdyacente = obtenerListaAdyacente(verticeActual);
+
+        // Iterar sobre los nodos adyacentes
+        Nodo nodoAdyacente = listaAdyacente.getInicio();
+        while (nodoAdyacente != null) {
+            String datoAdyacente = nodoAdyacente.getDato();
+
+            // Si el nodo adyacente no ha sido visitado, marcarlo como visitado y agregarlo a la cola
+            if (!marcas[posicionVertice(datoAdyacente)]) {
+                marcas[posicionVertice(datoAdyacente)] = true; // Marcamos el nodo como visitado
+                colaVertices.insertar(datoAdyacente); // Agregamos el nodo a la cola
+                i++;
+                arbol[i]=datoAdyacente;
+            }
+
+            nodoAdyacente = nodoAdyacente.getNext();
+        }
+    }
+        System.out.println("\nEl arbol de expansion es:\n");
+    for(i=0; i<arbol.length; i++)
+    {
+        System.out.println(arbol[i] + " ");
+    }
+    }
+
+   // Método para obtener la lista de adyacencia de un vértice
+   public static ListaLDoble obtenerListaAdyacente(String vertice) {
+    ListaLDoble listaAdyacente = App.adyacencias;
+
+    // Buscar el vértice en la lista de adyacencia
+    while (listaAdyacente != null && !listaAdyacente.getVertice().equals(vertice)) {
+        listaAdyacente = listaAdyacente.getNext();
+    }
+
+    return listaAdyacente;
+    }
+   
+   public static void BorrarMarcas()
+   {
+       int i;
+       for(i=0; i < marcas.length; i++)
+       {
+           marcas[i]=false;
+       }
+   }
 
 }
 

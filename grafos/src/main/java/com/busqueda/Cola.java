@@ -33,7 +33,7 @@ public class Cola {
     public String eliminar(){ 
         String element = this.inicio.getDato();
         this.inicio = this.inicio.getNext();
-        this.inicio.setPrev(null);
+        //this.inicio.setPrev(null);
         return element;
     }
 
