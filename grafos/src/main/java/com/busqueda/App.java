@@ -54,7 +54,6 @@ public class App {
                             break;
                         case 2: // bpa
                             busquedaPrimeroEnAnchura(verticeInicial);
-    
                             break;
                         case 3:
                             salirMenu = true;
@@ -209,6 +208,7 @@ public class App {
     colaVertices.insertar(vertInit); // Insertamos el nodo inicial en la cola
     arbol[0]=vertInit;
 
+    System.out.println("\nEl arbol de expansion es:\n");
     while (!colaVertices.estaVacia()) {
         String verticeActual;
         verticeActual = colaVertices.eliminar(); // Sacamos el primer elemento de la cola
@@ -220,6 +220,8 @@ public class App {
 
         // Iterar sobre los nodos adyacentes
         Nodo nodoAdyacente = listaAdyacente.getInicio();
+        //Impresion del arbol de expansion
+        
         while (nodoAdyacente != null) {
             String datoAdyacente = nodoAdyacente.getDato();
 
@@ -229,15 +231,11 @@ public class App {
                 colaVertices.insertar(datoAdyacente); // Agregamos el nodo a la cola
                 i++;
                 arbol[i]=datoAdyacente;
+                System.out.println(verticeActual + ": " + datoAdyacente);
             }
 
             nodoAdyacente = nodoAdyacente.getNext();
         }
-    }
-        System.out.println("\nEl arbol de expansion es:\n");
-    for(i=0; i<arbol.length; i++)
-    {
-        System.out.println(arbol[i] + " ");
     }
     }
 
